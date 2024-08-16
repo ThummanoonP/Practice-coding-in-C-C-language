@@ -2,6 +2,8 @@
 LANG: C
 */
 #include<stdio.h>
+#include<conio.h>
+#include<string.h>
 #define infinite 99999.
 
 
@@ -20,7 +22,6 @@ int main(){
     scanf("%d %d %d",&j,&z,&k);
     matrix[j-1][z-1]=k;
  }   
- /* ส่ในการหาระยะทางที่สั่นที่สุดโดยใช้วิธีคิดแบบวอร์แชว */
    for(z=0;z<n;z++){
     for(i=0;i<n;i++){
       for(j=0;j<n;j++){
@@ -29,11 +30,10 @@ int main(){
     }
   }
   for(i=0;i<n;i++){
-       if(i==0)  
-          printf("%d\n",0);      
-       else if(matrix[0][i]==infinite)
-          printf("%d\n",-1);
+       if(matrix[0][i]==infinite)
+          printf("%d\n",0);
        else printf("%d\n",matrix[0][i]);
 
   } 
+  getch();  
 }

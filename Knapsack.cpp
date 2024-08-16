@@ -2,45 +2,79 @@
 LANG: C
 */
 #include<stdio.h>
-#define arraySize 100001
+#include <conio.h>
+#define arraySize 100000
 
 typedef struct{
-   int v;
-   int w;
+   long long v;
+   long long w;
 }Data;
 
-/* ใช้หาค่าmax */ 
-int max(int x,int y){
-    if(x<y) return y;
-    return x;
+void quicksort(Data arr[],int low,int up){ 
+     int piv,left,right;
+     Data temp;
+     int pivot=0; 
+     left=low; 
+     right=up; 
+     piv=low; 
+     if(low>=up)                                     
+       return;
+     while(pivot==0){                                  
+
+       while(arr[piv].w<=arr[right].w&&piv!=right)       
+           right=right-1;
+       if(piv==right)                               
+           pivot=1;
+       if(arr[piv].w>arr[right].w){                     
+           temp=arr[piv];
+           arr[piv]=arr[right];
+           arr[right]=temp;
+           piv=right;
+       }      
+       
+       while(arr[piv].w>=arr[left].w&&left!=piv)         
+           left=left+1;
+       if(piv==left)                                 
+           pivot=1;
+       if(arr[piv].w<arr[left].w){                       
+           temp=arr[piv];
+           arr[piv]=arr[left];
+           arr[left]=temp;
+           piv=left;
+       } 
+     } 
+     quicksort(arr,low,piv-1);                        
+     quicksort(arr,piv+1,up);                        
 }
-
-
 
 int main() {
   Data arr[arraySize];
-  int n,z,i,j,max_v,max_w,m[101][10001];
-  scanf("%d",&n);
-  scanf("%d",&max_w);
-  scanf("%d",&max_v);
+  long long n,i,j,max_v,max_w,sum_vmax=0,sum_wmax=0,sum_v,sum_w;
+  scanf("%lld",&n);
+  scanf("%lld",&max_w);
+  scanf("%lld",&max_v);
   for (i=0; i <  n; i++) 
-     scanf("%d %d", &arr[i].v,&arr[i].w); 
-  
-  for(i=0;i<=max_w;i++){
-      m[0][i]=0 ;            
+     scanf("%lld %lld", &arr[i].v,&arr[i].w);
+  quicksort(arr,0,n-1);  
+  for(i=0;i<n;i++){
+        j=i+1;
+        sum_w=arr[i].w;
+        sum_v=arr[i].v;
+      while(sum_w<max_w&&j<n-1){
+           sum_w=sum_w+arr[j].w;
+           sum_v=sum_v+arr[j].v;
+           j++;
+      }
+      if(sum_w>max_w)
+         sum_v=sum_v-arr[j].v;
+      if(sum_v>sum_vmax)
+         sum_vmax=sum_v;
+         
   }
-  /* ส่วนนี้ใช้คำนวนหาราคาของสินค้าน้ำหนักต่างๆแล้วเก็บไว้ที่อาเรย์ */
-  for(i=1;i<=n;i++){
-     for(z=0;z<=max_w;z++){
-          if(arr[i-1].w>z)
-             m[i][z]=m[i-1][z];
-          else 
-             m[i][z]=max(m[i-1][z],arr[i-1].v+m[i-1][z - (arr[i-1].w)]);
-     }              
-  }
-  if(m[n][max_w]>=max_v)
+  if(sum_vmax>max_v)
     printf("YES\n");
   else printf("NO\n");
-  printf("%d",m[n][max_w]);
+  printf("%lld",sum_vmax);
+  getch();
   return 0;
 }
